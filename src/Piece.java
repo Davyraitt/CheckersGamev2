@@ -3,9 +3,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Ellipse;
 
+import java.io.Serializable;
 
 
-public class Piece extends StackPane {
+public class Piece extends StackPane implements Serializable {
 	
 	private PieceType type;
 	

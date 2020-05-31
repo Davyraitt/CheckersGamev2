@@ -1,3 +1,5 @@
+import javafx.application.Platform;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -25,6 +27,7 @@ public class Client {
 		}
 		try
 		{
+			assert socket != null;
 			in = new DataInputStream(socket.getInputStream());
 		} catch ( IOException e )
 		{
@@ -66,7 +69,7 @@ public class Client {
 	public void sendMessageToServer (String nickname, String message) {
 		try
 		{
-			out.writeUTF ( "chatmsg" + "Message by: " + nickname + ":  " + message);
+			out.writeUTF ( "Message by" + " " + nickname + ":  " + message);
 		} catch ( IOException e )
 		{
 			e.printStackTrace ( );
@@ -81,8 +84,19 @@ public class Client {
 			
 			try {
 				received = in.readUTF();
-				if (received.contains ( "chatmsgMessage" )) {
-					CheckersApp.setListOfMessages ( received );
+				if (received.contains ( "Message" )) {
+					System.out.println("before error");
+					String finalReceived = received;
+					Platform.runLater(new Runnable(){
+						@Override
+						public void run() {
+							CheckersApp.setListOfMessages (finalReceived);
+						}
+// ...
+					});
+
+					System.out.println("after error");
+
 				}
 				
 				System.out.println(received);

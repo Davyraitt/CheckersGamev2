@@ -1,18 +1,14 @@
-package Server;
-
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
 
 public class Server {
 	
 	
-	private final int port = 19999;
+	private final int port = 10302;
 	private ServerSocket serverSocket;
 	private ArrayList<ServerClient> clients = new ArrayList<>();
 	private HashMap<String, Thread> clientThreads = new HashMap<>();
@@ -63,7 +59,7 @@ public class Server {
 				System.out.println ("message is: "  + message );
 				
 				
-				if (message.contains ( "chatmsgMessage" )) {
+				if (message.contains ( "Message" )) {
 					System.out.println ("Message is a chat message!!!" );
 					sendToAllClients ( message );
 					isAChatMessage = true;
@@ -132,16 +128,7 @@ public class Server {
 			client.writeUTF(text);
 		}
 	}
-	
-	
-	public void writeStringToSocket(Socket socket, String text) {
-		
-		try {
-			socket.getOutputStream().write(text.getBytes());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+
 	
 	public void removeClient(ServerClient serverClient) {
 		String nickname = serverClient.getName();
