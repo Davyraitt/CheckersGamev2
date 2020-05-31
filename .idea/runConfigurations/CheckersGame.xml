@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="CheckersGame" type="Application" factoryName="Application" singleton="false">
+    <option name="MAIN_CLASS_NAME" value="CheckersApp" />
+    <module name="CheckersGame" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
