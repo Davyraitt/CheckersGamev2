@@ -59,13 +59,13 @@ public class OSServer implements Serializable {
         while (this.running) {
             System.out.println("Waiting for clients to connect...");
             Socket client = this.server.accept(); // Blocking call, blijven dus wachten....
-            OSServerClient serverClient = new OSServerClient(client, this);
-            this.clients.add(serverClient);
-            System.out.println("There are currently this many people in the arraylist: " + this.clients.size());
 
+
+            System.out.println("There are currently this many people in the arraylist: " + this.clients.size());
 
             // When this is defined, we get our first client.. After that we create a new thread to handle the connection
             new Thread(() -> {
+
                 handleClientConnectionObject(client);
 
             }).start();
@@ -75,20 +75,33 @@ public class OSServer implements Serializable {
     private void handleClientConnectionObject(Socket client) {
         System.out.println("Client connected! Proceeding to handle the connection now (ObjectStream)");
         System.out.println("Connected clients: " + this.clients.size());
-        try (ObjectOutputStream outObj = new ObjectOutputStream(client.getOutputStream());
-             ObjectInputStream inObj = new ObjectInputStream(client.getInputStream()))
-        // In the try, it is now our resource. When this fails the connection will close
+        try         // In the try, it is now our resource. When this fails the connection will close
 
         {
+            System.out.println("Before objectstream");
+            ObjectInputStream inObj = new ObjectInputStream(client.getInputStream());
+            System.out.println("After objectstream");
+
+
             boolean connected = true;
 
-            while (connected) {
-                boardTiles = (Tile[][]) inObj.readObject();
-                System.out.println("This is boardtiles : " + boardTiles);
+            int counter = 0;
 
-            }
+//            while (connected) {
+                this.boardTiles = (Tile[][]) inObj.readObject();
+                System.out.println("This is boardtiles : " + this.boardTiles.toString());
+                System.out.println("Size is: " + boardTiles.length);
+                for (Tile[] x : boardTiles) {
+                    for (Tile y : x) {
+                        counter ++;
+                        System.out.print(y.getFill() + "    || ");
+                    }
+                    System.out.println();
+                }
+//            }
 
-
+            System.out.println("Array size is: " + counter);
+            counter = 0;
             client.close();
 
 

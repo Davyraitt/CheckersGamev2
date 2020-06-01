@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class CheckersApp extends Application implements Serializable {
 
@@ -37,6 +38,7 @@ public class CheckersApp extends Application implements Serializable {
     private int port;
     private boolean isConnected = true;
     private Client client;
+    private OSClient checkersClient;
 
     private Stage globalStage;
 
@@ -59,13 +61,12 @@ public class CheckersApp extends Application implements Serializable {
     Button playButton;
 
     private static ObservableList<String> listOfMessages = FXCollections.observableList(new ArrayList<>());
-    private OSClient checkersClient;
 
     @Override
     public void start(Stage window) throws Exception {
         this.hostname = "127.0.0.1";
         this.port = 10301;
-        checkersClient = new OSClient("127.0.0.1", 10301);
+
 
         sceneMenu = new Scene(createContentMenu());
 
@@ -74,6 +75,7 @@ public class CheckersApp extends Application implements Serializable {
         window.show();
 
         globalStage = window;
+
 
     }
 
@@ -89,16 +91,17 @@ public class CheckersApp extends Application implements Serializable {
         window2.setScene(sceneCheckers);
         window2.show();
 
-        //((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+        checkersClient = new OSClient("127.0.0.1", 10301);
 
+        connectToCheckersClient(boardTiles);
+    }
 
-        // Play button is pressed, we are now going to create the checkers clients and server
-
+    private void connectToCheckersClient(Tile[][] boardTiles) {
         System.out.println("Creating a new checkerClient..");
         checkersClient.connectObject(boardTiles);
 
-
     }
+
 
     private Parent createContentCheckers() {
         Pane root = new Pane();
@@ -177,6 +180,8 @@ public class CheckersApp extends Application implements Serializable {
                     Piece otherPiece = result.getPiece();
                     boardTiles[convertToBoardCoordinates(otherPiece.getOldMouseX())][convertToBoardCoordinates(otherPiece.getOldMouseY())].setPiece(null);
                     pieceGroup.getChildren().remove(otherPiece);
+
+
                     break;
             }
         });
